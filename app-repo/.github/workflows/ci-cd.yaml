@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-and-push:
-    runs-on:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout 
         uses: actions/checkout@v4 
@@ -20,7 +20,7 @@ jobs:
       - name: Login to Docker Hub 
         uses: docker/login-action@v3 
         with: 
-          username: $ {{ secrets.DOCKERHUB_USER }}
+          username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push
@@ -35,6 +35,13 @@ jobs:
           git clone https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/tuusuario/gitops-repo.git
           cd gitops/apps/production/base
           sed -i "s/newTag: .*/newTag: ${{ github.sha }}/" kustomization.yaml
+
+      - name: Show kustomization 
+        run: cat gitops-repo/apps/production/base/kustomization.yaml
+
+      - name: Commit and push changes
+        run: |
+          cd gitops-repo/apps/production/base
           git add .
           git commit -m "Deploy ${{ github.sha }}"
           git push

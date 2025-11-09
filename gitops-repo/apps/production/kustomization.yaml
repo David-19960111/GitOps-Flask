@@ -1,6 +1,6 @@
 resources:
-  - deployment.yaml
-  - service.yaml
+  - base/deployment.yaml
+  - base/service.yaml
 
 images:
   - name: anarkatomica1996/mi-app-gitops

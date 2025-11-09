@@ -14,9 +14,9 @@ spec:
     spec: 
       containers:
         - name: flask 
-          image: anarkatomica1996/mi-app-gitops:v1
+          image: anarkatomica1996/mi-app-gitops:REPLACE_WITH_TAG
           ports: 
-            containerPort: 5000 
+          - containerPort: 5000 
           readinessProbe:
             httpGet:
               path: / 
