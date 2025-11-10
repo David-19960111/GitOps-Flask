@@ -4,4 +4,4 @@ resources:
 
 images:
   - name: anarkatomica1996/mi-app-gitops
-    newTag: 9e2fdd20a16546033b79d56dda9bd9671dbe693a
+    newTag: da39eaf5a61830350f31319962cc23a3aa7a11eb
