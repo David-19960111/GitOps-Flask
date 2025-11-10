@@ -39,6 +39,6 @@ jobs:
 
       - name: Update kustomization.yaml
         run: |
-          cd gitops-repo/apps/production
-          sed -i "s/newTag: .*/newTag: ${{ github.sha }}/" kustomization.yaml
+          sed -i "s/newTag: .*/newTag: ${{ github.sha }}/" gitops-repo/apps/production/kustomization.yaml
+
 
