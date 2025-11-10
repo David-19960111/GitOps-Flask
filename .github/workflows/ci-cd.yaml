@@ -37,6 +37,10 @@ jobs:
           rm -rf gitops-repo
           git clone https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/David-19960111/GitOps-Flask.git gitops-repo
 
+      - name: List files in GitOps repo
+        run: ls -R gitops-repo
+
+
       - name: Update kustomization.yaml
         run: |
           sed -i "s/newTag: .*/newTag: ${{ github.sha }}/" gitops-repo/apps/production/kustomization.yaml
