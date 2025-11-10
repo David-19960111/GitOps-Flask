@@ -2,48 +2,38 @@ name: Build and Promote (GitOps)
 
 on:
   push:
-    branches: [ master ] 
+    branches: [ master ]
+  workflow_dispatch:
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 
-        uses: actions/checkout@v4 
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Set Up QEMU
-        uses: docker/setup-qemu-action@v3 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
-      - name: Set Up Docker Buildx 
-        uses: docker/setup-buildx-action@v3 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Login to Docker Hub 
-        uses: docker/login-action@v3 
-        with: 
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
-        id: build
+      - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           push: true
           tags: anarkatomica1996/mi-app-gitops:${{ github.sha }}
 
-      - name: Update gitops-repo
+      - name: Clone GitOps repo
         run: |
           git clone https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/David-19960111/GitOps-Flask.git gitops-repo
-          cd gitops-repo/apps/production/base
-          sed -i "s/newTag: .*/newTag: ${{ github.sha }}/" kustomization.yaml
 
-      - name: Show kustomization 
-        run: cat gitops-repo/apps/production/base/kustomization.yaml
-
-      - name: Commit and push changes
+      - name: Update kustomization.yaml
         run: |
-          cd gitops-repo/apps/production/base
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "Deploy ${{ github.sha }}" || echo "No changes to commit"
-          git push
+          cd gitops-repo/apps
