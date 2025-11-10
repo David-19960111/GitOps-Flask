@@ -27,6 +27,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
+          context: ./app-repo
+          file: ./app-repo/Dockerfile
           push: true
           tags: anarkatomica1996/mi-app-gitops:${{ github.sha }}
 
