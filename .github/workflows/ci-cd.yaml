@@ -52,4 +52,13 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add apps/production/kustomization.yaml
           git commit -m "Deploy ${{ github.sha }}" || echo "No changes to commit"
-          git push
+          git push 
+
+      - name: Sync with Argo CD
+        if: success()
+        run: |
+          argocd login ${{ secrets.ARGOCD_SERVER }} \
+            --username ${{ secrets.ARGOCD_USER }} \
+            --password ${{ secrets.ARGOCD_PASSWORD }} \
+            --insecure
+          argocd app sync flask-gitops
